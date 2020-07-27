@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Branch edit - desktop change - Tree 1
+Version Changes:
+    1. Added option to enter number of pages
 Created on Wed May  6 21:47:25 2020
 
 @author: Administrator
@@ -14,6 +15,16 @@ from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
 from googlesearch import search
 import nltk
+#https://stackoverflow.com/questions/36516697/not-able-to-install-nltk-data-on-django-app-on-elastic-beanstalk/36526192#36526192 for bringing in the #ntlk data on AWS beanstalj environment
+try:
+    nltk.download('punkt', download_dir='/opt/python/current/app')
+    nltk.download('stopwords', download_dir='/opt/python/current/app')
+    nltk.download('vader_lexicon', download_dir='/opt/python/current/app')
+except:
+    nltk.download('punkt')
+    nltk.download('vader_lexicon')
+    nltk.download('stopwords')
+#nltk.download('punkt')
 from nltk.corpus import stopwords #nltk.download('stopwords') if unavailable
 from nltk.tokenize import word_tokenize # nltk.download('punkt')  if unavailable
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
@@ -21,7 +32,7 @@ import string
 import pandas as pd
 
 # to search 
-query = "Osama Bin Laden"
+#query = "Osama Bin Laden"
 
 class media_analyzer():
     
@@ -49,10 +60,13 @@ class media_analyzer():
                 text = ""
                 for element in page_text:
                     if element.text != "":
-                        text += element.text
+                        text += (element.text).encode("ascii", errors="ignore").decode(errors="ignore").lower()
                         text += " "
                 self.text_list.append(text)
+            else:
+                pass
         return self.text_list # returns a list of teext parsed from searched html links
+    
     # function to remove punctuation, remove stopwords, and tokenize string content to words
     @staticmethod
     def cleaner(review): # takes in string
@@ -66,6 +80,19 @@ class media_analyzer():
                 text += word
                 text += " "
         return text  # retunrs string
+    
+    #function to generate text summary statistics
+    @classmethod
+    def text_summary(cls,text_list):# takes in a list
+        wordcount = {}
+        for i in text_list:
+            strng = cls.cleaner(i)  #takes string,returns string
+            for word in strng.lower().split():
+                if word not in wordcount:
+                    wordcount[word] = 1
+                else:
+                    wordcount[word] += 1
+        return sorted(wordcount.items(),key=lambda kv:(kv[1], kv[0]), reverse = True)
     
     # function for sentiment analysis using NLTK's inbult sentiment analyzer
     @classmethod
@@ -98,30 +125,34 @@ class media_analyzer():
 
 import flask
 
-app = flask.Flask(__name__)           # a Flask object
+application = flask.Flask(__name__)           # a Flask object
 
 
-@app.route('/entity_search')
+@application.route('/', methods=['POST', 'GET']) #entity_search
 def ask_entity():
-    return flask.render_template('entity_question.html')
+    return flask.render_template('entity_question_v1.0.html')
 
-@app.route('/details', methods=['POST', 'GET'])
+@application.route('/details', methods=['POST', 'GET'])
 def entity_analysis():
     entity_name =    flask.request.form.get('id')     # from a POST (form with 'method="POST"')
+    num_pages =    int(flask.request.form.get('pages'))     # from a POST (form with 'method="POST"')
     no_id = flask.request.args.get('no_id')  # from a GET (URL)
 
     if entity_name:
-        inst = media_analyzer(entity_name,20)
+        inst = media_analyzer(entity_name,num_pages)
         out_1 = inst.link_extractor()
         out_2 = inst.text_extractor(out_1)
         out_3 = []
         for i in out_2:
             score = media_analyzer.polarity_calculator(i)
             out_3.append(score)
+            
         final_score = media_analyzer.entity_score(out_3)
+        keyword_list = (media_analyzer.text_summary(out_2)[:5])
+        
         
         #emp_details = media_analyzer.
-        msg = flask.render_template('results_template.html', obj = inst, score = final_score)
+        msg = flask.render_template('results_template_v2.0.html', obj = inst, score = final_score, word_s = keyword_list)
         #msg = "Details" + "\n" + emp_details.eid + "\n" + emp_details.fname + "\n" + emp_details.lname + "\n" + emp_details.state
     elif no_id:
         msg = 'No Object Details.'
@@ -129,7 +160,8 @@ def entity_analysis():
         raise ValueError('\nraised error:  no "name" or "no_name" params passed in request')
 
     return '<PRE>{}</PRE>'.format(msg)
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)    # app starts serving in debug mode on port 5000
+    application.run(debug=True)    # app starts serving in debug mode on port 5000
 
 
