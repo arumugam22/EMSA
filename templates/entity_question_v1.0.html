@@ -1,0 +1,15 @@
+<HTML>
+  <HEAD>
+  </HEAD>
+  <BODY>
+    Which is the entity you want to analyze?<BR>
+    <FORM ACTION="{{ url_for('entity_analysis') }}" METHOD="post">
+      <INPUT NAME="id" SIZE="20"><BR>
+	How many Pages do you want to search?<BR>  
+	  <INPUT NAME="pages" SIZE="20"><BR>
+      <INPUT TYPE="submit" VALUE="Hit it!">
+      <BR><BR>
+      <A HREF="{{ url_for('entity_analysis') }}?no_id=1">I don't know what to do</A>
+    </FORM>
+  </BODY>
+</HTML>
