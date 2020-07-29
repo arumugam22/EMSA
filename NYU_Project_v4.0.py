@@ -86,7 +86,7 @@ class media_analyzer():
     def text_summary(cls,text_list):# takes in a list
         wordcount = {}
         for i in text_list:
-            strng = cls.cleaner(i)  #takes string,returns string
+            strng = cls.cleaner(i.lower())  #takes string,returns string
             for word in strng.lower().split():
                 if word not in wordcount:
                     wordcount[word] = 1
@@ -144,7 +144,7 @@ def entity_analysis():
         out_2 = inst.text_extractor(out_1)
         out_3 = []
         for i in out_2:
-            score = media_analyzer.polarity_calculator(i)
+            score = media_analyzer.polarity_calculator(i.lower())
             out_3.append(score)
             
         final_score = media_analyzer.entity_score(out_3)
@@ -160,7 +160,6 @@ def entity_analysis():
         raise ValueError('\nraised error:  no "name" or "no_name" params passed in request')
 
     return '<PRE>{}</PRE>'.format(msg)
-
 if __name__ == '__main__':
     application.run(debug=True)    # app starts serving in debug mode on port 5000
 
