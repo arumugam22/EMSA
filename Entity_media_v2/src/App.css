@@ -1,0 +1,52 @@
+.app {
+  min-height: 100vh;
+  background: lightcyan;
+  display: flex;
+  justify-content: space-around;
+  align-items: middle;
+}
+
+.Dashboard {
+  height: 150px;
+  width: 200px;
+  background: wheat;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid blue;
+}
+
+.header_n {
+  min-height: 100vh;
+  background: rgb(248, 58, 248);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.Main {
+  background-color: #98fb98;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-box {
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  background: #aaa;
+}
+
+.header {
+  background-color: #f5986d;
+  padding: 30px;
+  text-align: center;
+  font-size: 35px;
+  color: white;
+}
