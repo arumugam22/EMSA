@@ -1,0 +1,17 @@
+Entity-Media-Sentiment-Analyzer
+The program analyzes the online media coverage for an entity
+
+File requirement:
+
+Save NYU_Project_v5.0.py, Template folder, src folder Install react in same folder using npm install ..
+
+Processing
+
+1. open the Python cmd and go to specific above folder and trigger "run NYU_Project_v5.0.py"
+2. open the cmd/terminal go to specific folder and enter "npm start"
+
+Output
+
+1. you can see the webpage with url http://localhost:3000/?
+2. If you select the case narrative Yes then case narrative document will store in template folder.
+3. Output of the entity will shown in http://localhost:5000/details?
