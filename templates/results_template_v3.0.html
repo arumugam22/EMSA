@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+    <HEAD>
+        <TITLE>Entity Score</TITLE>
+    </HEAD>
+    <BODY>
+        <P> Results of the media search.</P>
+        <TABLE border="1" width="50%">
+          <TR>
+		    <TD><B>Searched Name:</B></TD>
+            <TD>{{ obj.query }}</TD>
+		  </TR>
+		  <TR>
+		    <TD><B>Number of pages searched:</B></TD>
+            <TD>{{ obj.number_of_results }}</TD>
+		  </TR>
+		  <TR>
+		    <TD><B>Score:</B></TD>
+            <TD>{{ score }}</TD>
+		  </TR>
+		  {%for i in word_s %}
+		  <TR>
+		    <TD><B>Common Keywords:</B></TD>
+            <TD>{{ i }}</TD>
+		  {%endfor%}
+		  </TR>
+		  {%for i in word_TF %}
+		  <TR>
+		    <TD><B>Terrorist Financing Keywords:</B></TD>
+            <TD>{{ i }}</TD>
+		  {%endfor%}
+		  </TR>
+		  {%for i in word_ML %}
+		  <TR>
+		    <TD><B>Money Lanudering Keywords:</B></TD>
+            <TD>{{ i }}</TD>
+		  {%endfor%}
+		  </TR>
+		  {%for i in word_ABC %}
+		  <TR>
+		    <TD><B>Bribery- Corruption Keywords:</B></TD>
+            <TD>{{ i }}</TD>
+		  {%endfor%}
+		  </TR>
+        </TABLE>
+    </BODY>
+</HTML>
