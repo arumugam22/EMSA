@@ -94,6 +94,36 @@ class media_analyzer():
                     wordcount[word] += 1
         return sorted(wordcount.items(),key=lambda kv:(kv[1], kv[0]), reverse = True)
     
+    @classmethod
+    def TF_ML_ABC_Keywords(cls):
+        ABC_keywords = []
+        TF_keywords = []
+        ML_keywords = []
+        f = open("ABC_Keywords.txt", "r",errors = 'ignore')
+        for x in f:
+            ABC_keywords.append(((cls.cleaner(x)).lower()).strip())
+        f = open("AML_Keywords.txt", "r",errors = 'ignore')
+        for x in f:
+            ML_keywords.append(((cls.cleaner(x)).lower()).strip())
+        f = open("TF_Keywords.txt", "r",errors = 'ignore')
+        for x in f:
+            TF_keywords.append(((cls.cleaner(x)).lower()).strip())
+        return ABC_keywords,TF_keywords,ML_keywords
+    
+    @classmethod
+    def text_summary_keywords(cls,text_list,keyword_list):# takes in a list
+        wordcount = {}
+        for i in text_list:
+            strng = cls.cleaner(i.lower())  #takes string,returns string
+            for word in strng.lower().split():
+                if word in keyword_list: 
+                    if word not in wordcount:
+                        wordcount[word] = 1
+                    else:
+                        wordcount[word] += 1
+        return sorted(wordcount.items(),key=lambda kv:(kv[1], kv[0]), reverse = True)
+    
+    
     # function for sentiment analysis using NLTK's inbult sentiment analyzer
     @classmethod
     def polarity_calculator(cls,string_data): # takes in string
@@ -150,9 +180,16 @@ def entity_analysis():
         final_score = media_analyzer.entity_score(out_3)
         keyword_list = (media_analyzer.text_summary(out_2)[:5])
         
+        ABC_keywords,TF_keywords,ML_keywords = media_analyzer.TF_ML_ABC_Keywords()
+        ABC_list = (media_analyzer.text_summary_keywords(out_2,ABC_keywords)[:5])
+        TF_list = (media_analyzer.text_summary_keywords(out_2,TF_keywords)[:5])
+        ML_list = (media_analyzer.text_summary_keywords(out_2,ML_keywords)[:5])
         
+        #print (ML_list)
+        #print (ABC_list)
+        #print (TF_list)
         #emp_details = media_analyzer.
-        msg = flask.render_template('results_template_v2.0.html', obj = inst, score = final_score, word_s = keyword_list)
+        msg = flask.render_template('results_template_v3.0.html', obj = inst, score = final_score, word_s = keyword_list,word_TF = TF_list,word_ML= ML_list, word_ABC = ABC_list)
         #msg = "Details" + "\n" + emp_details.eid + "\n" + emp_details.fname + "\n" + emp_details.lname + "\n" + emp_details.state
     elif no_id:
         msg = 'No Object Details.'
