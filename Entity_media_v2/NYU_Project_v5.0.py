@@ -33,6 +33,7 @@ from pandas.io.html import read_html
 from docx import Document
 
 # to search 
+#query = "Osama Bin Laden"
 
 class media_analyzer():
     
@@ -60,12 +61,13 @@ class media_analyzer():
                 text = ""
                 for element in page_text:
                     if element.text != "":
-                        text += element.text
+                        text += (element.text).encode("ascii", errors="ignore").decode(errors="ignore").lower()
                         text += " "
                 self.text_list.append(text)
             else:
                 pass
         return self.text_list # returns a list of teext parsed from searched html links
+    
     # function to remove punctuation, remove stopwords, and tokenize string content to words
     @staticmethod
     def cleaner(review): # takes in string
@@ -79,19 +81,49 @@ class media_analyzer():
                 text += word
                 text += " "
         return text  # retunrs string
-
-        #function to generate text summary statistics
+    
+    #function to generate text summary statistics
     @classmethod
     def text_summary(cls,text_list):# takes in a list
         wordcount = {}
         for i in text_list:
-            strng = cls.cleaner(i)  #takes string,returns string
+            strng = cls.cleaner(i.lower())  #takes string,returns string
             for word in strng.lower().split():
                 if word not in wordcount:
                     wordcount[word] = 1
                 else:
                     wordcount[word] += 1
-        return sorted(wordcount.items(),key=lambda kv:(kv[1], kv[0]), reverse = True)    
+        return sorted(wordcount.items(),key=lambda kv:(kv[1], kv[0]), reverse = True)
+    
+    @classmethod
+    def TF_ML_ABC_Keywords(cls):
+        ABC_keywords = []
+        TF_keywords = []
+        ML_keywords = []
+        f = open("ABC_Keywords.txt", "r",errors = 'ignore')
+        for x in f:
+            ABC_keywords.append(((cls.cleaner(x)).lower()).strip())
+        f = open("AML_Keywords.txt", "r",errors = 'ignore')
+        for x in f:
+            ML_keywords.append(((cls.cleaner(x)).lower()).strip())
+        f = open("TF_Keywords.txt", "r",errors = 'ignore')
+        for x in f:
+            TF_keywords.append(((cls.cleaner(x)).lower()).strip())
+        return ABC_keywords,TF_keywords,ML_keywords
+    
+    @classmethod
+    def text_summary_keywords(cls,text_list,keyword_list):# takes in a list
+        wordcount = {}
+        for i in text_list:
+            strng = cls.cleaner(i.lower())  #takes string,returns string
+            for word in strng.lower().split():
+                if word in keyword_list: 
+                    if word not in wordcount:
+                        wordcount[word] = 1
+                    else:
+                        wordcount[word] += 1
+        return sorted(wordcount.items(),key=lambda kv:(kv[1], kv[0]), reverse = True)
+    
     
     # function for sentiment analysis using NLTK's inbult sentiment analyzer
     @classmethod
@@ -117,7 +149,7 @@ class media_analyzer():
 
 class case_narrative():
     # ASSIGN THE VARIABLES FROM MEDIA ANALYZER CLASS OUTPUT
-    def __init__(self,entity_name,final_score,out_1,keyword_list,page):
+    def __init__(self,entity_name,final_score,out_1,keyword_list,page,ABC_list,ML_list,TF_list):
         self.entity_name = entity_name
         self.final_score = final_score
         self.out_1 = out_1
@@ -173,8 +205,25 @@ class case_narrative():
    # TOP 5 KEY WORD LIST FROM MEDIA ANALYSER CLASS    
         for i in keyword_list:
             doc.add_paragraph (str(i))
-            
+
+        doc.add_heading ('Top 5 Money Laundering Key words in the webpage',2)
   
+   # TOP 5 KEY WORD LIST FROM MEDIA ANALYSER CLASS    
+        for i in ML_list:
+            doc.add_paragraph (str(i))    
+
+        doc.add_heading ('Top 5 Terrorist Financing Key words in the webpage',2)
+  
+   # TOP 5 KEY WORD LIST FROM MEDIA ANALYSER CLASS    
+        for i in TF_list:
+            doc.add_paragraph (str(i))             
+  
+        doc.add_heading ('Top 5 Bribery & Corruption Key words in the webpage',2)
+  
+   # TOP 5 KEY WORD LIST FROM MEDIA ANALYSER CLASS    
+        for i in ABC_list:
+            doc.add_paragraph (str(i)) 
+
         doc.add_paragraph ('Keywords releated to compliance: ' + ML_keyword)
         doc.add_heading ('Insights', 2)
         doc.add_paragraph('Based on the below web page search, Focal entity '+entity_name+' appear in ' +page+ ' web pages and overall sentiment is ' + sentiment + 'and sentiment final score is '+ str(final_score))
@@ -186,7 +235,7 @@ class case_narrative():
         doc.save('case_summary'+ entity_name +'.docx')
         
 # FLASK / REACT APP LOADING....
-import flask, request
+import flask
 app = flask.Flask(__name__)           # a Flask object
 
 @app.route('/details', methods=['POST', 'GET'])
@@ -217,12 +266,16 @@ def entity_analysis():
                 sentiment = "Negative"
 
             keyword_list = (media_analyzer.text_summary(out_2)[:5])
+            ABC_keywords,TF_keywords,ML_keywords = media_analyzer.TF_ML_ABC_Keywords()
+            ABC_list = (media_analyzer.text_summary_keywords(out_2,ABC_keywords)[:5])
+            TF_list = (media_analyzer.text_summary_keywords(out_2,TF_keywords)[:5])
+            ML_list = (media_analyzer.text_summary_keywords(out_2,ML_keywords)[:5])
 
             
             if worddoc == 'Yes':
-                inst1 = case_narrative(entity_name,final_score,out_1,keyword_list,page)
+                inst1 = case_narrative(entity_name,final_score,out_1,keyword_list,page,TF_list,ML_list,ABC_list)
            
-            msg = flask.render_template('Result_Template.html', obj = inst, score = final_score, word_s = keyword_list, final_sentiment = sentiment)
+            msg = flask.render_template('Result_Template.html', obj = inst, score = final_score, word_s = keyword_list, final_sentiment = sentiment,word_TF = TF_list,word_ML= ML_list, word_ABC = ABC_list)
             
         elif no_id:
             msg = 'No Object Details.'
