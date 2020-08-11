@@ -11,12 +11,12 @@
 <style>
 .ENT {
   
-  background-color: #C71585;
+  background-color: #40E0D0;
   position: absolute;
-  Left: 30px;
+  Left: 180px;
   width: 275px;
-  height: 250px;
-  border: 3px solid #C71585;
+  height: 80px;
+  border: 3px solid #40E0D0;
   padding: 25px;
   text-align: center;
   vertical-align: middle;
@@ -26,12 +26,13 @@
 </style>
 <style>
 .ENT1 {
-  background-color: #40E0D0;
+  background-color: #33ccff;
   position: absolute;
-  Left: 385px;
+  Left: 180px;
+  bottom:145px;
   width: 275px;
-  height: 250px;
-  border: 3px solid #40E0D0;
+  height: 80px;
+  border: 3px solid #33ccff;
   padding: 25px;
   text-align: center;
   vertical-align: middle;
@@ -40,12 +41,12 @@
 
 <style>
 .ENT2 {
-  background-color: #4169E1;
+  background-color: #99ccff;
   position: absolute;
-  RIGHT: 370px;
+  Left: 550px;
   width: 275px;
-  height: 250px;
-  border: 3px solid #4169E1;
+  height: 300px;
+  border: 3px solid #99ccff;
   padding: 25px;
   text-align: center;
   vertical-align: middle;
@@ -54,18 +55,36 @@
 
 <style>
 .ENT3 {
-  background-color: Orange;
+  background-color: #1cb5d1;
   position: absolute;
-  RIGHT: 20px;
-  width: 275px;
-  height: 250px;
-  border: 3px solid orange;
+  Left: 920px;
+  width: 375px;
+  height: 300px;
+  border: 3px solid #1cb5d1;
   padding: 25px;
   text-align: center;
   vertical-align: middle;
 }
 </style>
 
+<style>
+    .button {
+      background-color: #008CBA;/* Green */
+      border: none;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+    
+ 
+    .button4 {border-radius: 12px;}
+
+    </style>
 
 <style>
 body {
@@ -87,7 +106,7 @@ display: flex;
 
 <body>
   <div class="Main">
-  <h1> Entity Media Analyser</h1>
+  <h1> Entity Media Sentiment Analyser</h1>
   
 
   </div>
@@ -96,32 +115,32 @@ display: flex;
   </div>
 
   <form action="/details"method="get">
-    <button type="submit" formaction="http://localhost:5000/">Back to Home Page</button>
+    <button class="button button4" type="submit" formaction="http://localhost:5000/">Back to Home Page</button>
   
   </form>
 
 
   <div class="ENT">
-    <p>  Final Sentiment</p>
+    <p>  <b>Final Sentiment</b></p>
     <p> {{final_sentiment}}</p>
   </div>
 
   <div class="ENT1">
-    <p>Sentiment Score</p>
+    <p><b>Sentiment Score</b></p>
     <p>{{ score }} </p>
   </div>
 
   <div class="ENT2">
-    <p>Key Words</p>
+    <p><b>Top 5 Key Words</b></p>
     <p>{%for i in word_s %}{{ i }}{%endfor%}</p>
   </div>
 
   <div class="ENT3">
-    <p>Terrorist Financing Key Words</p>
+    <p><b>Terrorist Financing Top 5 Key Words</b></p>
     <p>{%for i in word_TF %}{{ i }}{%endfor%}</p>
-    <p>Money Laundering Key Words</p>
+    <p><b>Money Laundering Top 5 Key Words</b></p>
     <p>{%for i in word_ML %}{{ i }}{%endfor%}</p>
-    <p>Bribery & Corruption Key Words</p>
+    <p><b>Bribery & Corruption Top 5 Key Words</b></p>
     <p>{%for i in word_ABC %}{{ i }}{%endfor%}</p>
 
   </div>
