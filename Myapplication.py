@@ -30,8 +30,12 @@ import pandas as pd
 import wikipedia
 from pandas.io.html import read_html
 #from docx import newdocument
+
 #import docx
 from fpdf import FPDF
+
+import docx
+
 import pymysql
 
 
@@ -175,6 +179,7 @@ class case_narrative():
         if final_score > 0:
             sentiment = "Postitve"
             
+
         elif final_score < 0:
             sentiment = "Negative"
         
@@ -186,6 +191,7 @@ class case_narrative():
         selection = wiki_search[1]
         selection_page = wikipedia.page(selection)
         selection_url = selection_page.url
+
         page1 = selection_url
 
 # EXTRACT INFOBOX FROM WIKIPEDIA
@@ -199,6 +205,7 @@ class case_narrative():
 # CREATE THE CASE NARRATIVE WORD DOUCMENT AND PLACE THE PROFILE INFORMATION
         summ = (wikipedia.summary(selection, sentences = 2))
         
+
         pdf = FPDF(orientation = 'P', unit = 'mm', format='Letter')
         pdf.add_page()
         
@@ -317,7 +324,9 @@ class case_narrative():
             doc.add_paragraph(i)
 
         doc.save('case_summary'+ entity_name +'.docx')
+
         """
+
 
 class database_operations():
     
@@ -402,7 +411,6 @@ def entity_analysis():
         
         if final_score > 0:
             sentiment = "Postitve"
-            
         elif final_score < 0:
             sentiment = "Negative"
         

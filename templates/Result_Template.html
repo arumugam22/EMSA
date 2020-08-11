@@ -10,7 +10,6 @@
 
 <style>
 .ENT {
-  
   background-color: #40E0D0;
   position: absolute;
   Left: 180px;
@@ -55,6 +54,7 @@
 
 <style>
 .ENT3 {
+
   background-color: #1cb5d1;
   position: absolute;
   Left: 920px;
@@ -66,6 +66,7 @@
   vertical-align: middle;
 }
 </style>
+
 
 <style>
     .button {
@@ -106,7 +107,9 @@ display: flex;
 
 <body>
   <div class="Main">
+
   <h1> Entity Media Sentiment Analyser</h1>
+
   
 
   </div>
@@ -115,32 +118,42 @@ display: flex;
   </div>
 
   <form action="/details"method="get">
+
     <button class="button button4" type="submit" formaction="http://Entity-Media-Sentiment-Analyzer-dev.us-west-2.elasticbeanstalk.com">Back to Home Page</button>
+
   
   </form>
 
 
   <div class="ENT">
+
     <p><b>Final Sentiment</b></p>
+
     <p> {{final_sentiment}}</p>
   </div>
 
   <div class="ENT1">
+
     <p><b>Sentiment Score</b></p>
+
     <p>{{ score }} </p>
   </div>
 
   <div class="ENT2">
+
     <p><b>Top 5 Key Words</b></p>
+
     <p>{%for i in word_s %}{{ i }}{%endfor%}</p>
   </div>
 
   <div class="ENT3">
+
     <p><b>Terrorist Financing Top 5 Key Words</b></p>
     <p>{%for i in word_TF %}{{ i }}{%endfor%}</p>
     <p><b>Money Laundering Top 5 Key Words</b></p>
     <p>{%for i in word_ML %}{{ i }}{%endfor%}</p>
     <p><b>Bribery & Corruption Top 5 Key Words</b></p>
+
     <p>{%for i in word_ABC %}{{ i }}{%endfor%}</p>
 
   </div>
