@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+      .header {
+        background-color: #f5986d;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+      }
+      .app {
+        min-height: 100vh;
+        background: lightcyan;
+        display: flex;
+        justify-content: space-around;
+        align-items: middle;
+}
+    </style>
+  </head>
+  
+
+    <body>
+      <div class="app">
+        <FORM ACTION="{{ url_for('entity_analysis') }}" METHOD="post">
+          <div class="header">
+            <label>
+              <h1> Entity Media analyser one stop search</h1>
+            </label>
+          </div>
+          <br></br>
+          <br></br>
+          <div>
+            <label>Enter the Entity name to search</label>
+            &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            
+            <input
+              type="text"
+              name="ent"
+              SIZE="50"
+              
+              
+            />
+          </div>
+          <br></br>
+          <div>
+            <label>Select the number of page to search</label>
+            &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+            <select
+              
+              name="page"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+            </select>
+            <br></br>
+          </div>
+          <br></br>
+          <div>
+            <label>Select the country domain to search</label>
+            &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+            <select
+              
+              name="domain"
+            >
+              <option value="USA">USA</option>
+              <option value="GERMANY">GERMANY</option>
+              <option value="SPAIN">SPAIN</option>
+              <option value="INDIA">INDIA</option>
+            </select>
+          </div>
+          <br></br>
+          <div>
+            <label>You want a case narrative of this entity</label>
+            &nbsp; &nbsp;&nbsp;
+            <select
+              
+              name="narrative"
+            >
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <br></br>
+          <button type="Submit">Submit</button>
+        </form>
+      </div>
+  
+</html>

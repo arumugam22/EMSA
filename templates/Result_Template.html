@@ -1,0 +1,130 @@
+<html>
+<head>
+
+  <style> 
+    pre { 
+      white-space: normal;
+      font-family: Arial;
+    }  
+</style> 
+
+<style>
+.ENT {
+  
+  background-color: #C71585;
+  position: absolute;
+  Left: 30px;
+  width: 275px;
+  height: 250px;
+  border: 3px solid #C71585;
+  padding: 25px;
+  text-align: center;
+  vertical-align: middle;
+  
+}
+
+</style>
+<style>
+.ENT1 {
+  background-color: #40E0D0;
+  position: absolute;
+  Left: 385px;
+  width: 275px;
+  height: 250px;
+  border: 3px solid #40E0D0;
+  padding: 25px;
+  text-align: center;
+  vertical-align: middle;
+}
+</style>
+
+<style>
+.ENT2 {
+  background-color: #4169E1;
+  position: absolute;
+  RIGHT: 370px;
+  width: 275px;
+  height: 250px;
+  border: 3px solid #4169E1;
+  padding: 25px;
+  text-align: center;
+  vertical-align: middle;
+}
+</style>
+
+<style>
+.ENT3 {
+  background-color: Orange;
+  position: absolute;
+  RIGHT: 20px;
+  width: 275px;
+  height: 250px;
+  border: 3px solid orange;
+  padding: 25px;
+  text-align: center;
+  vertical-align: middle;
+}
+</style>
+
+
+<style>
+body {
+  background-color: #FFFAFA;
+}
+</style>
+
+<style> 
+
+.Main{
+background-color:#98FB98;
+height: 50px;
+display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+</head>
+
+<body>
+  <div class="Main">
+  <h1> Entity Media Analyser</h1>
+  
+
+  </div>
+  <br></br>
+  <h2 align-items: center;> Entity Name : {{ obj.query }} </h2>
+  </div>
+
+  <form action="/details"method="get">
+    <button type="submit" formaction="http://localhost:5000/">Back to Home Page</button>
+  
+  </form>
+
+
+  <div class="ENT">
+    <p>  Final Sentiment</p>
+    <p> {{final_sentiment}}</p>
+  </div>
+
+  <div class="ENT1">
+    <p>Sentiment Score</p>
+    <p>{{ score }} </p>
+  </div>
+
+  <div class="ENT2">
+    <p>Key Words</p>
+    <p>{%for i in word_s %}{{ i }}{%endfor%}</p>
+  </div>
+
+  <div class="ENT3">
+    <p>Terrorist Financing Key Words</p>
+    <p>{%for i in word_TF %}{{ i }}{%endfor%}</p>
+    <p>Money Laundering Key Words</p>
+    <p>{%for i in word_ML %}{{ i }}{%endfor%}</p>
+    <p>Bribery & Corruption Key Words</p>
+    <p>{%for i in word_ABC %}{{ i }}{%endfor%}</p>
+
+  </div>
+  
+</body>
+</html>
