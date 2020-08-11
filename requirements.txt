@@ -9,3 +9,6 @@ docx
 document
 pymysql
 Document
+fpdf==1.7.2
+Document
+

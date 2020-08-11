@@ -30,7 +30,12 @@ import pandas as pd
 import wikipedia
 from pandas.io.html import read_html
 #from docx import newdocument
+
+#import docx
+from fpdf import FPDF
+
 import docx
+
 import pymysql
 
 
@@ -174,10 +179,11 @@ class case_narrative():
         if final_score > 0:
             sentiment = "Postitve"
             
-        if final_score < 0:
+
+        elif final_score < 0:
             sentiment = "Negative"
         
-        if final_score = 0:
+        elif final_score == 0:
             sentiment = "Neutral"
             
 
@@ -185,11 +191,12 @@ class case_narrative():
         selection = wiki_search[1]
         selection_page = wikipedia.page(selection)
         selection_url = selection_page.url
-        page = selection_url
+
+        page1 = selection_url
 
 # EXTRACT INFOBOX FROM WIKIPEDIA
         try:
-            malformed = read_html(page, index_col=0, attrs={"class":"infobox"})
+            malformed = read_html(page1, index_col=0, attrs={"class":"infobox"})
             malformed[0]
             Err = 'No'
 
@@ -198,6 +205,73 @@ class case_narrative():
 # CREATE THE CASE NARRATIVE WORD DOUCMENT AND PLACE THE PROFILE INFORMATION
         summ = (wikipedia.summary(selection, sentences = 2))
         
+
+        pdf = FPDF(orientation = 'P', unit = 'mm', format='Letter')
+        pdf.add_page()
+        
+        pdf.set_font("Arial", 'B',size = 18) 
+        pdf.set_text_color(50, 143, 220)
+        pdf.cell(200, 10, txt = "Case Narrative Template",ln = 1, align = 'C') 
+        pdf.line(5.0,5.0,205.0,5.0)
+        pdf.set_font("Arial", size = 15) 
+        pdf.set_text_color(10, 10, 10)
+        pdf.cell(200, 10, txt = "Entity Name : " + entity_name, ln = 2, align = 'C') 
+        pdf.set_font("Arial", size = 12) 
+        pdf.set_text_color(50, 143, 220)
+        pdf.cell(200, 10, txt = "Introduction ", ln = 3, align = 'C') 
+        pdf.set_text_color(10, 10, 10)
+        pdf.multi_cell(0,10,summ)
+        pdf.set_font("Arial", 'B',size = 10) 
+        pdf.set_text_color(50, 143, 220)
+        pdf.cell(200, 10, txt = "Entity Media analyser", ln = 18)
+        pdf.set_text_color(10, 10, 10)
+        pdf.cell(200, 10, txt = "Sentiment : "+ sentiment, ln = 19 ) 
+        pdf.cell(200, 10, txt = "Final Score :" + str(final_score), ln = 20) 
+        pdf.set_font("Arial", 'B',size = 10) 
+        pdf.set_text_color(50, 143, 220)
+        pdf.cell(200, 10, txt = "Top 5 Key words in the webpage", ln = 22 ) 
+        pdf.set_text_color(10, 10, 10)
+        # TOP 5 KEY WORD LIST FROM MEDIA ANALYSER CLASS    
+        for i in keyword_list:
+            pdf.multi_cell(0,10, (str(i)))
+
+        pdf.set_text_color(50, 143, 220)
+        pdf.cell(200, 10, txt = "Top 5 Money Laundering Key words in the webpage", ln = 28)
+        pdf.set_text_color(10, 10, 10)
+   # TOP 5 KEY WORD LIST FROM MEDIA ANALYSER CLASS    
+        for i in ML_list:
+            pdf.multi_cell(0,10, (str(i)))   
+
+        pdf.set_text_color(50, 143, 220)
+        pdf.cell(200, 10, txt = "Top 5 Terrorist Financing Key words in the webpage", ln = 34 )
+        pdf.set_text_color(10, 10, 10)
+   # TOP 5 KEY WORD LIST FROM MEDIA ANALYSER CLASS    
+        for i in TF_list:
+            pdf.multi_cell(0,10, (str(i)))            
+  
+        pdf.set_text_color(50, 143, 220)
+        pdf.cell(200, 10, txt = "Top 5 Bribery & Corruption Key words in the webpage", ln = 46)
+        pdf.set_text_color(10, 10, 10)
+  
+   # TOP 5 KEY WORD LIST FROM MEDIA ANALYSER CLASS    
+        for i in ABC_list:
+            pdf.multi_cell(0,10, (str(i)))
+
+        pdf.set_text_color(50, 143, 220)
+        
+        pdf.cell(200, 10, txt = "Insights", ln = 65, align = 'C' )
+        pdf.set_text_color(10, 10, 10)
+        pdf.multi_cell(0,10,"Based on the below web page search, Focal entity "+entity_name+" appear in " +str(page)+ " web pages and overall sentiment is " + sentiment + " and sentiment final score is "+ str(final_score))
+        pdf.set_text_color(50, 143, 220)
+        pdf.cell(200,10,txt="Sources", ln = 70, align = 'C' )
+        pdf.set_text_color(10, 10, 10)
+       
+
+        for i in  out_1:
+            pdf.multi_cell(0,10, (i))         
+        pdf.output("case_summary"+ entity_name +".pdf",'F') 
+
+        """
         doc = docx.newdocument()
         doc.add_heading ('Case Narrative Template', 0)
         doc.add_heading ('Entity Name :' + entity_name, 2)
@@ -250,7 +324,9 @@ class case_narrative():
             doc.add_paragraph(i)
 
         doc.save('case_summary'+ entity_name +'.docx')
-        
+
+        """
+
 
 class database_operations():
     
@@ -335,11 +411,10 @@ def entity_analysis():
         
         if final_score > 0:
             sentiment = "Postitve"
-            
-        if final_score < 0:
+        elif final_score < 0:
             sentiment = "Negative"
         
-        if final_score = 0:
+        elif final_score == 0:
             sentiment = "Neutral"
 
         keyword_list = (media_analyzer.text_summary(out_2)[:5])
