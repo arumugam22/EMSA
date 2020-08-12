@@ -1,0 +1,14 @@
+
+# Archive Folders
+
+Archive/
+
+#Documentation Folder
+
+Documentation/
+
+# Sentiment Classifier benchmarking - Not required for application deployment
+
+Sentiment_Classifier_Analysis.py
+
+
