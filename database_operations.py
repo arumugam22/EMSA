@@ -63,7 +63,7 @@ class database_operations():
         port=3306
         dbname="EMSAdatabase"
         user="AbhishekKalra"
-        password="Abhishek_88"
+        password="XXXXXXXX"
         
         conn = pymysql.connect(host, user=user,port=port,
                            passwd=password, db=dbname )
