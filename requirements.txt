@@ -3,7 +3,7 @@ bs4
 google==3.0.0
 nltk==3.5
 pandas
-flask==1.1.2
+flask==2.3.2
 wikipedia
 docx
 document
